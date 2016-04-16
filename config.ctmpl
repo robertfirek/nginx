@@ -20,7 +20,7 @@ http {
         {{$activeZone := key (printf "%s-active-zone" .Name)}}
 
         {{if $activeZone}}
-            # active zone {{$activeZone}}
+            # active zone 2 {{$activeZone}}
             {{range service (printf "%s.%s" $activeZone .Name)}}server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
             {{else}}server 127.0.0.1:65535; # force a 502{{end}}
         {{else}}
