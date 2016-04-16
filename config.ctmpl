@@ -23,7 +23,7 @@ http {
         # active zone
         {{range service (printf "%s.%s" $activeZone .Name)}}server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
         {{else}}
-        {{range service .Name}server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
+        {{range service .Name}}server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
         {{end}}
 
         {{else}}server 127.0.0.1:65535; # force a 502{{end}}
