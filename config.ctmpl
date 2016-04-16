@@ -19,7 +19,12 @@ http {
     upstream {{.Name}} {
         least_conn;
         {{$activeZone := key (printf "%s-active-zone" .Name)}}
-        {{$serviceNameWithTag := printf "%s.%s" $activeZone .Name}}|
+        {{if $activeZone}}
+            {{$serviceNameWithTag := printf "%s.%s" $activeZone .Name}}|
+        {{else}}
+            {{$serviceNameWithTag := .Name}}
+        {{end}}
+        # |{{$serviceNameWithTag}}|
         {{range service ($serviceNameWithTag)}}server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
         {{else}}server 127.0.0.1:65535; # force a 502{{end}}
     }
