@@ -19,9 +19,12 @@ http {
         least_conn;
         {{$activeZone := key (printf "%s-active-zone" .Name)}}
         {{$serviceNameWithTag := .Name}}
+
         {{if $activeZone}}
+            {{with $serviceNameWithTag}}
             {{$serviceNameWithTag := printf "%s.%s" $activeZone .Name}}
             # {{$serviceNameWithTag}}
+            {{end}}
         {{end}}
         # {{$serviceNameWithTag}}
         {{range service ($serviceNameWithTag)}}server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
