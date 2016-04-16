@@ -14,16 +14,16 @@ http {
     sendfile on;
     keepalive_timeout 60;
 
-
     {{range services}}
     upstream {{.Name}} {
         least_conn;
         {{$activeZone := key (printf "%s-active-zone" .Name)}}
         {{$serviceNameWithTag := .Name}}
         {{if $activeZone}}
-            {{$serviceNameWithTag := printf "%s.%s" $activeZone .Name}}|
-        {{end}}           
-        # |{{$serviceNameWithTag}}|
+            {{$serviceNameWithTag := printf "%s.%s" $activeZone .Name}}
+            # {{$serviceNameWithTag}}
+        {{end}}
+        # {{$serviceNameWithTag}}
         {{range service ($serviceNameWithTag)}}server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
         {{else}}server 127.0.0.1:65535; # force a 502{{end}}
     }
